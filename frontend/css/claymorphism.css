@@ -1,0 +1,65 @@
+:root {
+  --color-bg: #F3EFE0;
+  --color-bg-alt: #F7F5F0;
+  --color-primary: #4A2E35;
+  --color-secondary: #6B7A40;
+  --card-radius: 16px;
+  --shadow-normal: 5px 5px 10px #e0dad0, -5px -5px 10px #ffffff;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  margin: 0;
+  padding: 0;
+}
+
+.clay-card {
+  background: var(--color-bg-alt);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-normal);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+.clay-card:hover {
+  box-shadow: 7px 7px 14px #ddd5c7, -7px -7px 14px #ffffff;
+}
+
+.clay-btn {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 3px 3px 6px #d5cfc2, -3px -3px 6px #ffffff;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.clay-btn:active {
+  transform: scale(0.98);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.clay-btn-secondary {
+  background-color: var(--color-secondary);
+}
+
+.clay-input {
+  background: var(--color-bg-alt);
+  border: 1px solid #dcd5c7;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  color: var(--color-primary);
+  box-shadow: inset 2px 2px 5px #e0dad0, inset -2px -2px 5px #ffffff;
+  outline: none;
+}
+
+.clay-input:focus {
+  border-color: var(--color-primary);
+}

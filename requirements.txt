@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+motor
+beanie
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+pandas
+scikit-learn
+pydantic-settings
+python-dotenv
+pymupdf
+pytesseract
+pdf2image
+google-generativeai
+pytest
+pytest-asyncio
