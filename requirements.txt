@@ -15,3 +15,5 @@ pdf2image
 google-generativeai
 pytest
 pytest-asyncio
+bcrypt
+email-validator
