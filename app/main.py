@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from app.routers import auth
+from app.routers import auth, finance
 from app.models.user import User
 from app.models.expense import Expense
 
@@ -32,6 +32,7 @@ app = FastAPI(
 )
 
 app.include_router(auth.router)
+app.include_router(finance.router)
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.exists(frontend_dir):
