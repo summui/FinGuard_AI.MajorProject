@@ -31,7 +31,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(auth.router, tags=["Auth"])
+app.include_router(auth.router)
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.exists(frontend_dir):
