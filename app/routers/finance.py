@@ -4,6 +4,7 @@ from app.routers.auth import get_current_user
 from app.models.user import User, FinancialProfile
 from app.models.expense import Expense
 from app.schemas.finance import ExpenseCreate, FinancialProfileUpdate
+from app.services.analytics import monthly_category_totals, detect_anomalies
 
 router = APIRouter(prefix="/finance", tags=["finance"])
 
@@ -41,3 +42,16 @@ async def budget_status(category: str, cap: float, user: User = Depends(get_curr
         "over_budget": percent_over > 15,
         "percent_over": round(percent_over, 2)
     }
+
+@router.get("/analytics/trends")
+async def analytics_trends(user: User = Depends(get_current_user)):
+    expenses = await Expense.find(Expense.user_id == str(user.id)).to_list()
+    data = [{"date": str(e.date), "category": e.category, "amount": e.amount} for e in expenses]
+    return monthly_category_totals(data)
+
+@router.get("/analytics/anomalies")
+async def analytics_anomalies(user: User = Depends(get_current_user)):
+    expenses = await Expense.find(Expense.user_id == str(user.id)).to_list()
+    data = [{"id": str(e.id), "amount": e.amount} for e in expenses]
+    anomaly_ids = detect_anomalies(data)
+    return {"anomalous_expense_ids": anomaly_ids}
