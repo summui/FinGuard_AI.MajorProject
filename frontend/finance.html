@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="css/claymorphism.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <div class="container">
     <header class="navbar">
@@ -27,10 +29,35 @@
         <h1>Personal Finance & Expense Tracking</h1>
         <p>Manage budgets, log expenses, and view spending breakdowns.</p>
       </section>
+
+      <section class="clay-card">
+        <h2>Add Expense</h2>
+        <form id="expense-form">
+          <select id="category" class="clay-input" required>
+            <option value="">Select category</option>
+            <option>Food</option>
+            <option>Shopping</option>
+            <option>Travel</option>
+            <option>Bills</option>
+            <option>Healthcare</option>
+            <option>Education</option>
+            <option>Others</option>
+          </select>
+          <input type="number" id="amount" class="clay-input" placeholder="Amount" required min="0.01" step="0.01">
+          <input type="date" id="date" class="clay-input" required>
+          <button type="submit" class="clay-button">Add Expense</button>
+        </form>
+      </section>
+
+      <section class="clay-card">
+        <h2>Your Expenses</h2>
+        <div id="expense-list">Loading...</div>
+      </section>
     </main>
   </div>
 
   <script src="js/api.js"></script>
   <script src="js/finance.js"></script>
 </body>
+
 </html>

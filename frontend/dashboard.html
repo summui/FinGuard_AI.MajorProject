@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="css/claymorphism.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <div class="container">
     <header class="navbar">
@@ -23,9 +25,24 @@
     </header>
 
     <main>
+      <section class="metric-grid">
+        <div class="metric-card">
+          <div class="label">Monthly Salary</div>
+          <div class="value" id="metric-salary">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Total Expenses</div>
+          <div class="value" id="metric-expenses">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Net Savings</div>
+          <div class="value" id="metric-savings">—</div>
+        </div>
+      </section>
+
       <section class="clay-card">
-        <h1>Overview Dashboard</h1>
-        <p>Real-time analytics across your financial health and active contracts.</p>
+        <h2>Recent Activity</h2>
+        <div id="recent-expenses">Loading...</div>
       </section>
     </main>
   </div>
@@ -33,4 +50,5 @@
   <script src="js/api.js"></script>
   <script src="js/dashboard.js"></script>
 </body>
+
 </html>

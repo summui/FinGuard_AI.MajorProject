@@ -1,28 +1,18 @@
-const BASE_URL = 'http://localhost:8000';
+const API_BASE = "http://127.0.0.1:8000";
 
-/**
- * Helper function to perform authenticated and unauthenticated API requests.
- * Reads JWT token from localStorage and attaches Authorization header if present.
- */
 async function apiFetch(endpoint, options = {}) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...(options.headers || {}),
   };
-
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
-
-  const url = endpoint.startsWith('http')
-    ? endpoint
-    : `${BASE_URL}${endpoint.startsWith('/') ? endpoint : '/' + endpoint}`;
-
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
-
-  return response;
+  const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.detail || `Request failed: ${response.status}`);
+  }
+  return response.json();
 }
