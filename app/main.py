@@ -5,9 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
-from app.routers import auth, finance
+from app.routers import auth, finance, contracts
 from app.models.user import User
 from app.models.expense import Expense
+from app.models.contract import Contract
 
 
 @asynccontextmanager
@@ -17,7 +18,7 @@ async def lifespan(app: FastAPI):
     client = AsyncIOMotorClient(mongo_uri)
     database = client[db_name]
 
-    await init_beanie(database=database, document_models=[User, Expense])
+    await init_beanie(database=database, document_models=[User, Expense, Contract])
 
     yield
 
