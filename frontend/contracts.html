@@ -1,12 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contract Risk Analysis - FinGuard AI</title>
   <link rel="stylesheet" href="css/claymorphism.css">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .upload-zone {
+      border: 2.5px dashed #c5bfb2;
+      border-radius: var(--card-radius);
+      padding: 48px 24px;
+      text-align: center;
+      background: var(--color-bg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+      border-color: var(--color-primary);
+      background: var(--color-bg-alt);
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .upload-zone h3 {
+      color: var(--color-primary);
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .upload-zone p {
+      color: var(--color-secondary);
+      font-size: 13px;
+      margin: 0 0 16px;
+    }
+
+    /* shimmer loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #ece8de 25%, #f5f2eb 50%, #ece8de 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+      height: 16px;
+      margin-bottom: 10px;
+    }
+
+    .skeleton.tall {
+      height: 60px;
+    }
+
+    .skeleton.short {
+      width: 60%;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    /* risk badge */
+    .risk-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .risk-high {
+      background: #fde8e8;
+      color: #c0392b;
+    }
+
+    .risk-medium {
+      background: #fef3e2;
+      color: #d35400;
+    }
+
+    .risk-low {
+      background: #e8f5e9;
+      color: #27ae60;
+    }
+
+    /* flags */
+    .flag-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .flag-red {
+      background: #fde8e8;
+      color: #c0392b;
+      border-left: 3px solid #c0392b;
+    }
+
+    .flag-green {
+      background: #e8f5e9;
+      color: #27ae60;
+      border-left: 3px solid #27ae60;
+    }
+
+    .flag-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .flag-text {
+      line-height: 1.5;
+    }
+
+    .flag-category {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    /* summary box */
+    .summary-box {
+      background: var(--color-bg);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-primary);
+      box-shadow: inset 2px 2px 5px #e0dad0, inset -2px -2px 5px #ffffff;
+      margin-bottom: 16px;
+    }
+
+    /* error state */
+    .error-box {
+      background: #fdf2f2;
+      border-radius: var(--card-radius);
+      padding: 24px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-box h3 {
+      color: #c0392b;
+      margin: 0 0 8px;
+    }
+
+    .error-box p {
+      color: #666;
+      font-size: 13px;
+      margin: 0 0 16px;
+    }
+
+    /* contract history */
+    .history-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e0dad0;
+      gap: 12px;
+    }
+
+    .history-row:last-child {
+      border-bottom: none;
+    }
+
+    .history-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .history-date {
+      font-size: 11px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #result-section {
+      display: none;
+    }
+
+    #loading-section {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container">
     <header class="navbar">
@@ -23,14 +240,96 @@
     </header>
 
     <main>
-      <section class="clay-card">
-        <h1>Contract Risk Assessment</h1>
-        <p>Upload contracts for automated clause breakdown and risk scoring.</p>
-      </section>
+
+      <!-- Page header -->
+      <div class="clay-card" style="margin-bottom:20px">
+        <h1 style="margin:0 0 6px;font-size:22px">Contract Risk Analysis</h1>
+        <p style="margin:0;color:var(--color-secondary);font-size:14px">
+          Upload any PDF contract — loan, rental, insurance — and get an instant AI risk breakdown.
+        </p>
+      </div>
+
+      <!-- Upload zone -->
+      <div class="clay-card" id="upload-section">
+        <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
+          ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <div class="upload-icon">📄</div>
+          <h3>Drop your contract here</h3>
+          <p>PDF files only · Maximum 15MB</p>
+          <button class="clay-btn" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
+            Browse file
+          </button>
+          <input type="file" id="file-input" accept=".pdf" style="display:none" onchange="handleFileSelect(event)">
+        </div>
+
+        <!-- Error box -->
+        <div class="error-box" id="error-box">
+          <h3>⚠️ Analysis failed</h3>
+          <p id="error-message">Document unreadable. Please upload a clearer PDF copy.</p>
+          <button class="clay-btn" onclick="resetUpload()">Try again</button>
+        </div>
+      </div>
+
+      <!-- Loading skeleton -->
+      <div class="clay-card" id="loading-section">
+        <p class="section-title">🔍 Analyzing your contract...</p>
+        <div class="skeleton tall"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton short"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton short"></div>
+      </div>
+
+      <!-- Result section -->
+      <div id="result-section">
+
+        <!-- Risk score card -->
+        <div class="clay-card">
+          <div
+            style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+            <div>
+              <p class="section-title" style="margin-bottom:4px">Risk assessment result</p>
+              <p id="result-filename" style="font-size:13px;color:#999;margin:0"></p>
+            </div>
+            <span class="risk-badge" id="risk-badge">Medium Risk</span>
+          </div>
+          <div class="summary-box" id="result-summary"></div>
+          <button class="clay-btn clay-btn-secondary" onclick="resetUpload()" style="font-size:13px">
+            Analyze another contract
+          </button>
+        </div>
+
+        <!-- Flags -->
+        <div class="two-col">
+          <div class="clay-card">
+            <p class="section-title">🔴 Red flags</p>
+            <div id="red-flags-list">
+              <p style="font-size:13px;color:#999">No red flags found.</p>
+            </div>
+          </div>
+          <div class="clay-card">
+            <p class="section-title">🟢 Green flags</p>
+            <div id="green-flags-list">
+              <p style="font-size:13px;color:#999">No green flags found.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contract history -->
+      <div class="clay-card" id="history-section">
+        <p class="section-title">📁 Recent contracts</p>
+        <div id="history-list">
+          <p style="font-size:13px;color:#999">No contracts analyzed yet.</p>
+        </div>
+      </div>
+
     </main>
   </div>
 
   <script src="js/api.js"></script>
   <script src="js/contracts.js"></script>
 </body>
+
 </html>
