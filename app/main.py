@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
+from app.core.config import settings
 from app.routers import auth, finance, contracts
 from app.models.user import User
 from app.models.expense import Expense
@@ -13,10 +14,8 @@ from app.models.contract import Contract
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-    db_name = os.getenv("MONGO_DB_NAME", "finguard_ai")
-    client = AsyncIOMotorClient(mongo_uri)
-    database = client[db_name]
+    client = AsyncIOMotorClient(settings.mongo_uri)
+    database = client[settings.mongo_db_name]
 
     await init_beanie(database=database, document_models=[User, Expense, Contract])
 
@@ -34,6 +33,7 @@ app = FastAPI(
 
 app.include_router(auth.router)
 app.include_router(finance.router)
+app.include_router(contracts.router)
 
 frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 if os.path.exists(frontend_dir):
