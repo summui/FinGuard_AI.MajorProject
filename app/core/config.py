@@ -1,6 +1,6 @@
 # Application settings and environment variable management using Pydantic Settings
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     mongo_uri: str
@@ -10,8 +10,6 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
     gemini_api_key: str
 
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
